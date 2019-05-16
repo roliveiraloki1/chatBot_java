@@ -29,7 +29,6 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             System.out.println("O servidor está aberto na porta: " + port);
-            System.out.println(serverSocket.getInetAddress());
 
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -46,7 +45,11 @@ public class Server {
             ex.printStackTrace();
         }
     }
- 
+    
+    public void respond(String message, UserThread user){
+        user.sendMessage(message);
+    }
+    
     /**
      * Quando um usuário é desconectado, remove a Thread daquele usuário do sistema.
      */

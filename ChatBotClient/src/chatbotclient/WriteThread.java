@@ -5,24 +5,26 @@
  */
 package chatbotclient;
 
-import java.io.Console;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import static java.lang.System.console;
 import java.net.Socket;
 
 /**
  *
  * @author roliv
  */
-public class WriteThread extends Thread{
-    
+public class WriteThread extends Thread {
+
     private PrintWriter writer;
     private Socket socket;
- 
+
     public WriteThread(Socket socket) {
         this.socket = socket;
- 
+
         try {
             OutputStream output = socket.getOutputStream();
             writer = new PrintWriter(output, true);
@@ -31,25 +33,25 @@ public class WriteThread extends Thread{
             ex.printStackTrace();
         }
     }
- 
+
+    @Override
     public void run() {
- 
-        Console console = System.console();
- 
-        String text;
- 
-        do {
-            text = console.readLine();
-            writer.println(text);
- 
-        } while (!text.equals("Sair"));
- 
         try {
+            BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+            
+            String input;
+
+            do {
+                input = console.readLine();
+                writer.println(input);
+
+            } while (!input.equals("Sair"));
+
             socket.close();
         } catch (IOException ex) {
- 
+
             System.out.println("Erro ao enviar mensagem pro servidor: " + ex.getMessage());
         }
     }
-    
+
 }

@@ -10,10 +10,30 @@ package chatbotserver;
  * @author roliv
  */
 public class Command {
-    
-public static void executeCommand(String command){
-    System.out.println("Você disse: " + command);
-    
-}
-    
+
+    public static String executeCommand(String command) {
+
+        String aux;
+        if (isCommand(command)) {
+            switch (command) {
+                case "comando":
+                    System.out.println("foi aqui");
+                    return command;
+                case "\\comandos":
+                    System.out.println("foi aqui tb");
+                    return command;
+                default:
+                    aux = "Comando não encontrado.";
+                    return aux;
+            }
+        }
+        return "oi, td bem?";
+
+    }
+
+    public static boolean isCommand(String string) {
+
+        return string.charAt(0) == '\\';
+    }
+
 }

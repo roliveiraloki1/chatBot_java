@@ -32,6 +32,7 @@ public class UserThread extends Thread{
         try {
             InputStream input = socket.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            
  
             OutputStream output = socket.getOutputStream();
             writer = new PrintWriter(output, true);
@@ -42,18 +43,19 @@ public class UserThread extends Thread{
  
             do {
                 clientMessage = reader.readLine();
-                Command.executeCommand(clientMessage);
+                System.out.println("Usuário " + userID + ": " + clientMessage);
+
+                server.respond(Command.executeCommand(clientMessage), this);
+                
  
             } while (!clientMessage.equals("Sair"));
  
             server.removeUser(this);
             socket.close();
-            System.out.println(userID + " saiu.");
 
  
         } catch (IOException ex) {
-            System.out.println("Error in UserThread: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("Erro na thread do usuário: " + ex.getMessage());
         }
     }
  
