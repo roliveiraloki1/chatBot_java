@@ -28,7 +28,6 @@ public class ReadThread extends Thread {
             reader = new BufferedReader(new InputStreamReader(input));
         } catch (IOException ex) {
             System.out.println("Erro ao pegar input: " + ex.getMessage());
-            //ex.printStackTrace();
         }
     }
 
@@ -39,13 +38,11 @@ public class ReadThread extends Thread {
     public void run() {
         while (true) {
             try {
-
                 String response = reader.readLine();
-                System.out.println("\n" + response);
+                System.out.println(response);
 
             } catch (IOException ex) {
                 System.out.println("Você foi desconectado do servidor: " + ex.getMessage());
-               // ex.printStackTrace();
                 break;
             }
         }

@@ -42,12 +42,11 @@ public class Server {
 
         } catch (IOException ex) {
             System.out.println("Erro no servidor: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
     
     public void respond(String message, UserThread user){
-        user.sendMessage(message);
+        user.sendMessage("Server: \r" + message);
     }
     
     /**

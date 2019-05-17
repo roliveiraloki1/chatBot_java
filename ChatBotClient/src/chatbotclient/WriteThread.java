@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import static java.lang.System.console;
 import java.net.Socket;
 
 /**
@@ -30,7 +29,6 @@ public class WriteThread extends Thread {
             writer = new PrintWriter(output, true);
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 

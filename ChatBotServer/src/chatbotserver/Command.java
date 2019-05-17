@@ -13,27 +13,42 @@ public class Command {
 
     public static String executeCommand(String command) {
 
-        String aux;
         if (isCommand(command)) {
             switch (command) {
-                case "comando":
-                    System.out.println("foi aqui");
-                    return command;
                 case "\\comandos":
-                    System.out.println("foi aqui tb");
+                    return listCommands();
+                case "\\info":
+                    return showInfo();
+                case "\\randgame":
                     return command;
                 default:
-                    aux = "Comando não encontrado.";
-                    return aux;
+                    return "Comando não encontrado.";
             }
         }
-        return "oi, td bem?";
+        return command;
 
     }
 
     public static boolean isCommand(String string) {
-
         return string.charAt(0) == '\\';
+    }
+    
+    public static String listCommands(){
+        return "comandos disponíveis: \r"
+                + "***************************************************** \r"
+                + "\\comandos - Mostra a lista de comandos disponíveis. \r"
+                + "***************************************************** \r"
+                + "\\info - Mostra informações sobre o chatbot \r"
+                + "***************************************************** \r";
+    }
+    
+    public static String showInfo(){
+        return "------------------------------------------------------------------------- \n"
+                + "Este é um chatbot implementado em java, como entrega do Trabalho 1 da \n"
+                + "disciplina Redes e Sistemas Distribuídos do quinto período do curço de \n"
+                + "Engenharia de Software , ministrada pelo professor Rodrigo Mansilha. \n"
+                + "Este trabalho foi produzido pelo aluno da disciplina Rodrigo Oliveira. \n"
+                + "-------------------------------------------------------------------------";
     }
 
 }

@@ -19,22 +19,23 @@ import java.net.Socket;
  */
 public class UserThread extends Thread{
     
-    private Socket socket;
-    private Server server;
+    private final Socket SOCKET;
+    private final Server SERVER;
     private PrintWriter writer;
  
     public UserThread(Socket socket, Server server) {
-        this.socket = socket;
-        this.server = server;
+        this.SOCKET = socket;
+        this.SERVER = server;
     }
     
+    @Override
     public void run() {
         try {
-            InputStream input = socket.getInputStream();
+            InputStream input = SOCKET.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             
  
-            OutputStream output = socket.getOutputStream();
+            OutputStream output = SOCKET.getOutputStream();
             writer = new PrintWriter(output, true);
  
             String userID = String.valueOf(this.getId());
@@ -45,13 +46,13 @@ public class UserThread extends Thread{
                 clientMessage = reader.readLine();
                 System.out.println("Usuário " + userID + ": " + clientMessage);
 
-                server.respond(Command.executeCommand(clientMessage), this);
+                SERVER.respond(Command.executeCommand(clientMessage), this);
                 
  
             } while (!clientMessage.equals("Sair"));
  
-            server.removeUser(this);
-            socket.close();
+            SERVER.removeUser(this);
+            SOCKET.close();
 
  
         } catch (IOException ex) {
