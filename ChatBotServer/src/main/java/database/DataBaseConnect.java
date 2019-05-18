@@ -26,112 +26,101 @@ public class DataBaseConnect {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost/bot_server?useTimezone=true&serverTimezone=UTC";
 
-
+    /**
+     * Busca na base de dados todos os jogos que possuem o determinado genero
+     *
+     * @param genre recebe um enum
+     * @return retorna lista de obj Games com os dados encontrados
+     */
     public static List<Game> getGameByGenre(GenreEnum genre) {
         Connection conn = null;
         PreparedStatement stmt = null;
         List<Game> gameList = new ArrayList();
         try {
 
-            //STEP 3: Open a connection
-            conn = DriverManager.getConnection(DB_URL, "root", "");
-            //STEP 4: Execute a query
-            String sql = "SELECT * FROM Games WHERE genre = ?";
+            conn = DriverManager.getConnection(DB_URL, "root", ""); //Abre a conexão           
+            String sql = "SELECT * FROM Games WHERE genre = ?"; //Executa a linha de Query
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, genre.getCode());
             ResultSet rs = stmt.executeQuery();
 
-            //STEP 5: Extract data from result set
-            while (rs.next()) {
-                //Retrieve by column name
+            while (rs.next()) { //Extrai os dados do set de resultados               
                 Game game = new Game();
-                game.setName(rs.getString("name"));
+                game.setName(rs.getString("name")); //recupera por nome da coluna
                 game.setGameplay(GameplayEnum.values()[rs.getInt("gameplay")]);
                 game.setGenre(GenreEnum.values()[rs.getInt("genre")]);
                 game.setType(TypeEnum.values()[rs.getInt("type")]);
                 game.setScore(rs.getFloat("score"));
                 gameList.add(game);
-                
+
             }
-            //STEP 6: Clean-up environment
-            rs.close();
+
+            rs.close(); //fecha as conexões abertas
             stmt.close();
             conn.close();
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            //finally block used to close resources
+        } finally { //Bloqueia o acesso aos recursos           
             try {
                 if (stmt != null) {
                     stmt.close();
                 }
             } catch (SQLException se2) {
-            }// nothing we can do
+            }
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException se) {
                 se.printStackTrace();
-            }//end finally try
-        }//end try
+            }
+        }
         return gameList;
-    }//end main
-    
+    }
+
+    /**
+     * Método que busca um jogo randomico na base de dados
+     *
+     * @return retorna o jogo encontrado
+     */
     public static Game getRandomGame() {
         Connection conn = null;
         PreparedStatement stmt = null;
         Game game = new Game();
         try {
-            //STEP 2: Register JDBC driver
-            //Class.forName("com.mysql.jdbc.Driver");
-            //STEP 3: Open a connection
             conn = DriverManager.getConnection(DB_URL, "root", "");
-            //STEP 4: Execute a query
             String sql = "SELECT * FROM games ORDER BY RAND() LIMIT 1";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery(sql);
 
-            //STEP 5: Extract data from result set
             while (rs.next()) {
-                //Retrieve by column name               
                 game.setName(rs.getString("name"));
                 game.setGameplay(GameplayEnum.values()[rs.getInt("gameplay")]);
                 game.setGenre(GenreEnum.values()[rs.getInt("genre")]);
                 game.setType(TypeEnum.values()[rs.getInt("type")]);
-                game.setScore(rs.getFloat("score"));          
+                game.setScore(rs.getFloat("score"));
             }
-            //STEP 6: Clean-up environment
             rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            //Handle errors for JDBC
             se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
         } finally {
-            //finally block used to close resources
             try {
                 if (stmt != null) {
                     stmt.close();
                 }
             } catch (SQLException se2) {
-            }// nothing we can do
+            }
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException se) {
                 se.printStackTrace();
-            }//end finally try
-        }//end try
+            }
+        }
         return game;
-    }//end main
+    }
 
 }

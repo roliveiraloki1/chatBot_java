@@ -18,24 +18,32 @@ public class Client {
     private String hostname;
     private int port;
  
-    public Client(String hostname, int port) {
+    /**
+     * construtor que seta o hostname e port que o cliente se conecta
+     * @param hostname do server
+     * @param port porta do server
+     */
+    public Client(String hostname, int port) { 
         this.hostname = hostname;
         this.port = port;
     }
  
+    /**
+     * Método que executa a ação do cliente para conexão ao server
+     */
     public void execute() {
         try {
-            Socket socket = new Socket(hostname, port);
+            Socket socket = new Socket(hostname, port); //cria um socket com os parametros para conectar no server
  
             System.out.println("Conectado ao server.");
  
-            new ReadThread(socket).start();
-            new WriteThread(socket).start();
+            new ReadThread(socket).start(); //executa o metodo run() da classe ReadThread
+            new WriteThread(socket).start(); //executa o metodo run() da classe WriteThread
  
         } catch (UnknownHostException ex) {
-            System.out.println("Servidor não encontrado: " + ex.getMessage());
+            System.out.println("Servidor não encontrado: " + ex.getMessage()); //printa erro caso não encontre o server
         } catch (IOException ex) {
-            System.out.println("Erro I/O: " + ex.getMessage());
+            System.out.println("Erro I/O: " + ex.getMessage()); //printa erro caso encontre algum outro problema
         }
  
     }

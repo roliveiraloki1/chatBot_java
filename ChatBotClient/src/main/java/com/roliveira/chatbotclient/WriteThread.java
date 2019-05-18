@@ -20,17 +20,24 @@ public class WriteThread extends Thread {
     private PrintWriter writer;
     private Socket socket;
 
-    public WriteThread(Socket socket) {
+    /**
+     * construtor da classe
+     * @param socket utiliza o socket criado do cliente para receber a resposta do server
+     */
+    public WriteThread(Socket socket) { //construtor do WriteThread
         this.socket = socket;
 
         try {
-            OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
+            OutputStream output = socket.getOutputStream(); //pega a resposta dada
+            writer = new PrintWriter(output, true); //cria um escritor com a resposta
         } catch (IOException ex) {
-            System.out.println("Error getting output stream: " + ex.getMessage());
+            System.out.println("Error getting output stream: " + ex.getMessage()); //printa msg de erro caso não consiga receber a resposta
         }
     }
 
+       /**
+        * Método que inicia o receptor de mensagens do usuário
+        */
     @Override
     public void run() {
         try {
@@ -39,7 +46,7 @@ public class WriteThread extends Thread {
             String input;
 
             do {
-                input = console.readLine();
+                input = console.readLine(); //
                 writer.println(input);
 
             } while (!input.equals("Sair"));

@@ -6,12 +6,12 @@
 package entidades.enums;
 
 /**
- *
+ * classe enum para tipos de gameplay
  * @author roliv
  */
 public enum GameplayEnum {
     
-    FIRSTPERSON(0, "Primeira Pessoa"),
+    FIRSTPERSON(0, "Primeira Pessoa"), 
     THIRDPERSON(1, "Treceira Pessoa"),
     ISOMETRIC(2, "Isométrico"),
     SIDESCROLLER(3, "Plataforma"),
@@ -26,6 +26,11 @@ public enum GameplayEnum {
         return this.description;
     }
 
+    /**
+     * seta um numerador e uma string para cada enum
+     * @param code numerado do enum
+     * @param description descrição do enum
+     */
     private GameplayEnum(int code, String description) {
         this.code = code;
         this.description = description;

@@ -15,8 +15,8 @@ public class ChatBotServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int port = 12345;
-        Server server = new Server(port);
-        server.execute();
+        int port = 12345; //seta o port do server em 1234
+        Server server = new Server(port); //cira um server com o port setado 
+        server.execute(); //executa o server
     }
 }

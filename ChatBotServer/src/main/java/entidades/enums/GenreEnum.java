@@ -8,7 +8,7 @@ package entidades.enums;
 import lombok.Getter;
 
 /**
- *
+ * classe enum para tipos de Genero
  * @author roliv
  */
 @Getter
@@ -30,7 +30,12 @@ public enum GenreEnum {
     public String getDescription() {
         return this.description;
     }
-
+    
+    /**
+     * seta um numerador e uma string para cada enum
+     * @param code numerado do enum
+     * @param description descrição do enum
+     */
     private GenreEnum(int code, String description) {
         this.code = code;
         this.description = description;

@@ -18,51 +18,61 @@ import java.net.Socket;
  * @author roliv
  */
 public class UserThread extends Thread {
-    private final Socket SOCKET;
-    private final Server SERVER;
+    private final Socket socket;
+    private final Server server;
     private PrintWriter writer;
  
-    public UserThread(Socket socket, Server server) {
-        this.SOCKET = socket;
-        this.SERVER = server;
+    /**
+     * construtor da thread dos usuários. Recebe o server a entrar e um socket para o server
+     * @param socket socket daquele cliente
+     * @param server dados do server que o cliente está
+     */
+    public UserThread(Socket socket, Server server) { 
+        this.socket = socket;
+        this.server = server;
     }
     
+    /**
+     * método executor que inicia as ações do Usuário da thread
+     */
     @Override
     public void run() {
         try {
-            InputStream input = SOCKET.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            InputStream input = socket.getInputStream(); //cria um "leitor" para receber o que o usuário escreve
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));//Guarda o que o usuário digitou
             
  
-            OutputStream output = SOCKET.getOutputStream();
-            writer = new PrintWriter(output, true);
+            OutputStream output = socket.getOutputStream(); //receptor para o que foi escrito
+            writer = new PrintWriter(output, true); //cria um PrintWriter para printar os dados 
  
-            String userID = String.valueOf(this.getId());
+            String userID = String.valueOf(this.getId()); //pega o id do usuário 
            
             String clientMessage;
  
             do {
-                clientMessage = reader.readLine();
-                System.out.println("Usuário " + userID + ": " + clientMessage);
+                clientMessage = reader.readLine(); //recebe do cliente o que foi digitado
+                System.out.println("Usuário " + userID + ": " + clientMessage); //printa no console do servidor a mensagem recebida
 
-                SERVER.respond(Command.executeCommand(clientMessage), this);
+                server.respond(Command.executeCommand(clientMessage), this); //responde no console do cliente a resposta recebida pelo
+                                                                            //comando
                 
  
-            } while (!clientMessage.equals("Sair"));
+            } while (!clientMessage.equals("Sair")); //enquanto a mensagem recebida do usuário for diferente de "Sair" continua rodando
  
-            SERVER.removeUser(this);
-            SOCKET.close();
+            server.removeUser(this); //ao sair do laço, remove o usuário
+            socket.close(); //ao remover o usuário, fecha o socket que estava sendo utilizado por ele
 
  
         } catch (IOException ex) {
-            System.out.println("Erro na thread do usuário: " + ex.getMessage());
+            System.out.println("Erro na thread do usuário: " + ex.getMessage()); //printa erro caso encontre erro na thread
         }
     }
  
     /**
-     * Sends a message to the client.
+     * método que envia a resposta do server para o usuário específico
+     * @param message 
      */
-    void sendMessage(String message) {
+    void sendMessage(String message) { 
         writer.println(message);
     }
 }

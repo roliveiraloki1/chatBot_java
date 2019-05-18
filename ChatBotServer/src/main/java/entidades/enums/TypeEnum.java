@@ -6,7 +6,7 @@
 package entidades.enums;
 
 /**
- *
+ * classe enum para tipos de games
  * @author roliv
  */
 public enum TypeEnum {
@@ -24,7 +24,12 @@ public enum TypeEnum {
     public String getDescription() {
         return this.description;
     }
-
+    
+    /**
+     * seta um numerador e uma string para cada enum
+     * @param code numerado do enum
+     * @param description descrição do enum
+     */
     private TypeEnum(int code, String description) {
         this.code = code;
         this.description = description;

@@ -19,27 +19,30 @@ public class ReadThread extends Thread{
     
     private BufferedReader reader;
     private Socket socket;
-
-    public ReadThread(Socket socket) {
+    /**
+     * método construtor da  classe
+     * @param socket utiliza o socket criado do cliente para enviar a resposta do server
+     */
+    public ReadThread(Socket socket) { //construtor recebe o socket setado ao criar o cliente
         this.socket = socket;
 
         try {
-            InputStream input = socket.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(input));
+            InputStream input = socket.getInputStream(); 
+            reader = new BufferedReader(new InputStreamReader(input)); //recebe e lê o input do cliente
         } catch (IOException ex) {
             System.out.println("Erro ao pegar input: " + ex.getMessage());
         }
     }
 
     /**
-     *
+     *executa o método leitor do cliente
      */
     @Override
-    public void run() {
+    public void run() { 
         while (true) {
             try {
                 System.out.print(">> ");
-                String response = reader.readLine();
+                String response = reader.readLine(); //recebe a linha escrita do cliente para o server
                 System.out.println(response);
 
             } catch (IOException ex) {

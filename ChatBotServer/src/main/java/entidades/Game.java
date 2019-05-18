@@ -10,7 +10,7 @@ import entidades.enums.GenreEnum;
 import entidades.enums.TypeEnum;
 
 /**
- *
+ * classe geradora de objs
  * @author roliv
  */
 public class Game {
@@ -61,6 +61,10 @@ public class Game {
         this.type = type;
     }
 
+    /**
+     * transforma os dados do obj em uma string montada para o usuário
+     * @return retorna uma string
+     */
     @Override
     public String toString() {
         return "-------------------------------------------------------------------\n"

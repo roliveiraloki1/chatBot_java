@@ -14,10 +14,10 @@ public class ChatBotClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String hostname = null;
-        int port = 12345;
+        String hostname = null; //seta o hostname como null
+        int port = 12345; //seta a porta a se conectar em 1234
  
-        Client client = new Client(hostname, port);
-        client.execute();
+        Client client = new Client(hostname, port); //cria um novo cliente
+        client.execute(); //executa o metodo para conectar o cliente criado
     }
 }
