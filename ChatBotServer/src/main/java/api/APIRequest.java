@@ -14,16 +14,14 @@ import wrapper.Version;
  * @author roliv
  */
 public class APIRequest {
-//    private final IGDBWrapper WRAPPER = new IGDBWrapper("c82e50bcdd7ac72a94dc3b6e8298420f", Version.STANDARD, false);;
-//    private Parameters parameters = new Parameters()
-//	.addFields("*")
-//	.addOrder("published_at:desc");
-//    
-//     /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String[] args) {
-//    
-//    }
-    
+
+    private IGDBWrapper wrapper;
+    private Parameters parameters;
+
+    public APIRequest(String fields) {
+        this.wrapper = new IGDBWrapper("c82e50bcdd7ac72a94dc3b6e8298420f", Version.STANDARD, false);
+        this.parameters = new Parameters()
+                .addFields(fields)
+                .addOrder("published_at:desc");
+    }
 }
