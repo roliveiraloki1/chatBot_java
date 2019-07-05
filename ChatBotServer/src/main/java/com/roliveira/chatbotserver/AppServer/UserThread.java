@@ -31,6 +31,10 @@ public class UserThread extends Thread {
         this.socket = socket;
         this.server = server;
     }
+
+    public Socket getSocket() {
+        return socket;
+    }
     
     /**
      * método executor que inicia as ações do Usuário da thread

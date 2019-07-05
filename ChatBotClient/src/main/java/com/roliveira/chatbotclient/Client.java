@@ -6,6 +6,7 @@
 package com.roliveira.chatbotclient;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
 
@@ -15,16 +16,16 @@ import java.rmi.UnknownHostException;
  */
 public class Client {
     
-    private String hostname;
+    private InetAddress address;
     private int port;
  
     /**
      * construtor que seta o hostname e port que o cliente se conecta
-     * @param hostname do server
+     * @param address endereço do server
      * @param port porta do server
      */
-    public Client(String hostname, int port) { 
-        this.hostname = hostname;
+    public Client(InetAddress address, int port) { 
+        this.address = address;
         this.port = port;
     }
  
@@ -33,7 +34,7 @@ public class Client {
      */
     public void execute() {
         try {
-            Socket socket = new Socket(hostname, port); //cria um socket com os parametros para conectar no server
+            Socket socket = new Socket(address, port); //cria um socket com os parametros para conectar no server
  
             System.out.println("Conectado ao server.");
  
