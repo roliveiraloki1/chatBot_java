@@ -31,29 +31,23 @@ public class ChatBotServer {
      */
     public static void main(String[] args) throws UnknownHostException, IOException {
 
-        InetAddress adrs = InetAddress.getByName("127.0.0.205"); //localhost
+        InetAddress adrs = InetAddress.getByName("127.0.0.1"); //localhost
         mainServer = new Server(1234, adrs);
         mainServer.setNome("Gerenciador");
 
         //Aguarda conexões de clientes e aloca-os
         do {
-            System.out.println("Gerenciador aberto e esperando clientes.");
-            ServerSocket serverSocket = new ServerSocket(1234, 15, adrs);
-            Socket socket = serverSocket.accept();
-            UserThread newUser = new UserThread(socket, mainServer);
-
-            OutputStream sender = newUser.getSocket().getOutputStream();
-            PrintWriter writer = new PrintWriter(sender, true);
+            PrintWriter writer = mainServer.setClient(mainServer);
             
-            execute(writer, portList, ipList);//Passa informações do servidor ao qual será alocado para o Cliente
-
-            
+            execute(writer, portList, ipList);//Passa informações do servidor ao qual será alocado para o Cliente            
         } while (true);
     }
 
     public static String execute(PrintWriter writer, int[] portList, String[] ipList) throws UnknownHostException {
         if (serverList.isEmpty()) {
+            System.out.println("chegou aqui");
             Server servidor1 = new Server(portList[0], InetAddress.getByName(ipList[0]));
+            servidor1.execute();
             serverList.add(servidor1);
             writer.println(servidor1.getAddress());
             writer.println(servidor1.getPort());
@@ -70,13 +64,15 @@ public class ChatBotServer {
                 if (serverList.size() < i) {
                     if (i == 2) {
                         Server servidor2 = new Server(portList[i - 1], InetAddress.getByName(ipList[i - 1]));
-                        serverList.add(servidor2);
+                        servidor2.execute();
+                        serverList.add(servidor2);                      
                         writer.println(servidor2.getAddress());
                         writer.println(servidor2.getPort());
                         return "Novo cliente conectado ao servidor 2";
                     }
                     if (i == 3) {
                         Server servidor3 = new Server(portList[i - 1], InetAddress.getByName(ipList[i - 1]));
+                        servidor3.execute();
                         serverList.add(servidor3);
                         writer.println(servidor3.getAddress());
                         writer.println(servidor3.getPort());
@@ -85,6 +81,6 @@ public class ChatBotServer {
                 }
             }
         }
-        return "Servidores Cheios";
+        return "Servidores Cheios!";
     }
 }
