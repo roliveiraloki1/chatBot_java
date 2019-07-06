@@ -13,6 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -20,24 +22,41 @@ import java.util.Set;
  */
 public class Server implements Runnable {
 
-    private int port;
+    private int portServer;
     private int counter;
+    private ServerSocket server;
     private InetAddress address;
     private String nome = "servidor";
     private final Set<UserThread> userThreads = new HashSet<>(); //aqui é criado os UserThreads por Set para, posteriormente, limitar
     //o númeor de clientes que acessam o sistema
 
-    public Server(int port, InetAddress address) {
-        this.port = port;
+    public Server(int port, InetAddress address) throws IOException {
+        server = new ServerSocket(port, 10, address);
+        portServer = port;
         this.address = address;
+        
     }
+    
+    public Server() {}
 
     public void setNome(String nome) {
         this.nome = nome;
     }
+    
+    public Server getUserServer(){
+        return this;
+    }
 
+    public ServerSocket getServer() {
+        return server;
+    }
+
+    public void setServer(ServerSocket server) {
+        this.server = server;
+    }
+    
     public int getPort() {
-        return port;
+        return portServer;
     }
 
     public int getCounter() {
@@ -48,36 +67,32 @@ public class Server implements Runnable {
         return address;
     }
 
-    public Server() {
-
-    }
-
     /**
      * executa o server
      */
-    public void execute() {
-
-        try (ServerSocket serverSocket = new ServerSocket(port, 3, address)) { //aqui o sistema tenta abrir o server com um ServerSocket utilizando a 
-            //porta setada.
-
-            System.out.println("O " + nome + " está aberto na porta: " + port + " e no endereço de ip: " + address + ".");
-
-            while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
-                Socket socket = serverSocket.accept(); //aqui é aberto um novo socket para o novo usuário
-                System.out.println("Novo usuário conectado.");
-                counter++;
-
-                UserThread newUser = new UserThread(socket, this); //é criado um novo usuário que recebe o novo socket
-                userThreads.add(newUser); //o usuário é adicionado no hashSet de threads
-                newUser.start(); //executa o método run() da classe UserThread
-
-            }
-
-        } catch (IOException ex) {
-            System.out.println("Erro no servidor: " + ex.getMessage()); //printa um erro caso o servidor não possa ser aberto
-        }
-
-    }
+//    public void execute() {
+//
+//        try (ServerSocket serverSocket = new ServerSocket(port, 3, address)) { //aqui o sistema tenta abrir o server com um ServerSocket utilizando a 
+//            //porta setada.
+//
+//            System.out.println("O " + nome + " está aberto na porta: " + port + " e no endereço de ip: " + address + ".");
+//
+//            while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
+//                Socket socket = serverSocket.accept(); //aqui é aberto um novo socket para o novo usuário
+//                System.out.println("Novo usuário conectado.");
+//                counter++;
+//
+//                UserThread newUser = new UserThread(socket, this); //é criado um novo usuário que recebe o novo socket
+//                userThreads.add(newUser); //o usuário é adicionado no hashSet de threads
+//                newUser.start(); //executa o método run() da classe UserThread
+//
+//            }
+//
+//        } catch (IOException ex) {
+//            System.out.println("Erro no servidor: " + ex.getMessage()); //printa um erro caso o servidor não possa ser aberto
+//        }
+//
+//    }
 
     /**
      * esse método pega a mensagem retornada pelo server e printa para o usuário
@@ -126,19 +141,21 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(port, 3, address)) { //aqui o sistema tenta abrir o server com um ServerSocket utilizando a 
+        try { //aqui o sistema tenta abrir o server com um ServerSocket utilizando a 
             //porta setada.
-
-            System.out.println("O " + nome + " está aberto na porta: " + port + " e no endereço de ip: " + address + ".");
+            ExecutorService pool = Executors.newFixedThreadPool(20);
+            System.out.println("O " + nome + " está aberto na porta: " + portServer + " e no endereço de ip: " + address + ".");
 
             while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
-                Socket socket = serverSocket.accept(); //aqui é aberto um novo socket para o novo usuário
-                System.out.println("Novo usuário conectado.");
-                counter++;
-
-                UserThread newUser = new UserThread(socket, this); //é criado um novo usuário que recebe o novo socket
-                userThreads.add(newUser); //o usuário é adicionado no hashSet de threads
-                newUser.start(); //executa o método run() da classe UserThread
+                
+                pool.execute(new UserThread(server.accept(), this));
+//                Socket socket = server.accept(); //aqui é aberto um novo socket para o novo usuário
+//                System.out.println("Novo usuário conectado.");
+//                counter++;
+//
+//                UserThread newUser = new UserThread(socket, this); //é criado um novo usuário que recebe o novo socket
+//                userThreads.add(newUser); //o usuário é adicionado nas threads
+//                newUser.start(); //executa o método run() da classe UserThread
 
             }
 

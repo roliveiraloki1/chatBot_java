@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,6 +49,13 @@ public class ReadThread extends Thread{
 
             } catch (IOException ex) {
                 System.out.println("Você foi desconectado do servidor: " + ex.getMessage());
+                try {
+                    this.socket.close();
+                } catch (IOException ex1) {
+                    Logger.getLogger(ReadThread.class.getName()).log(Level.SEVERE, null, ex1);
+                } catch (Throwable ex1) {
+                    Logger.getLogger(ReadThread.class.getName()).log(Level.SEVERE, null, ex1);
+                }
                 break;
             }
         }
