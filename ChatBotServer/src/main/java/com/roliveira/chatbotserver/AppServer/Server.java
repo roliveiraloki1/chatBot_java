@@ -126,7 +126,25 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try (ServerSocket serverSocket = new ServerSocket(port, 3, address)) { //aqui o sistema tenta abrir o server com um ServerSocket utilizando a 
+            //porta setada.
+
+            System.out.println("O " + nome + " está aberto na porta: " + port + " e no endereço de ip: " + address + ".");
+
+            while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
+                Socket socket = serverSocket.accept(); //aqui é aberto um novo socket para o novo usuário
+                System.out.println("Novo usuário conectado.");
+                counter++;
+
+                UserThread newUser = new UserThread(socket, this); //é criado um novo usuário que recebe o novo socket
+                userThreads.add(newUser); //o usuário é adicionado no hashSet de threads
+                newUser.start(); //executa o método run() da classe UserThread
+
+            }
+
+        } catch (IOException ex) {
+            System.out.println("Erro no servidor: " + ex.getMessage()); //printa um erro caso o servidor não possa ser aberto
+        }
     }
 
 }

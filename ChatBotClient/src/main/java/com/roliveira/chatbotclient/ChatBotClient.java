@@ -26,16 +26,19 @@ public class ChatBotClient {
         InetAddress adrs = InetAddress.getByName("127.0.0.1"); //seta o ip do servidor Gerenciador
         Socket mainServer = new Socket(adrs, 1234); //Conecta ao servidor Gerenciador
         
+        System.out.println("teste");
         InputStream input = mainServer.getInputStream();//Aguarda dados do MainServer (Gerenciador)
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));  
         String ip = reader.readLine();//Recebe endereço ip e porta do servidor que será alocado
         int port = Integer.parseInt(reader.readLine());
         String[] strIP = ip.split("/");//Formaliza a string do ip
+        System.out.println(port);
         InetAddress address = InetAddress.getByName(strIP[1]);// seta o endereço com o ip recebido
         
         mainServer.close();//Fecha socket do líder neste cliente
  
         Client client = new Client(address, port); //cria um novo cliente
+        System.out.println(address +" "+ port);
         client.execute(); //executa o metodo para conectar o cliente criado
     }
 }

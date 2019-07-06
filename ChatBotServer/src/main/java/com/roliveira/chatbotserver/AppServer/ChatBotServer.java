@@ -45,12 +45,13 @@ public class ChatBotServer {
 
     public static String execute(PrintWriter writer, int[] portList, String[] ipList) throws UnknownHostException {
         if (serverList.isEmpty()) {
-            System.out.println("chegou aqui");
+            
             Server servidor1 = new Server(portList[0], InetAddress.getByName(ipList[0]));
-            servidor1.execute();
             serverList.add(servidor1);
-            writer.println(servidor1.getAddress());
-            writer.println(servidor1.getPort());
+            serverList.get(0).run();
+            System.out.println("chegou aqui");
+            writer.println(InetAddress.getByName(ipList[0]));
+            writer.println(portList[0]);
             return "Novo Servidor Aberto";
         } else {
             for (int i = 0; i <= 3; i++) {
@@ -64,16 +65,16 @@ public class ChatBotServer {
                 if (serverList.size() < i) {
                     if (i == 2) {
                         Server servidor2 = new Server(portList[i - 1], InetAddress.getByName(ipList[i - 1]));
-                        servidor2.execute();
-                        serverList.add(servidor2);                      
+                        serverList.add(servidor2);
+                        serverList.get(1).run();
                         writer.println(servidor2.getAddress());
                         writer.println(servidor2.getPort());
                         return "Novo cliente conectado ao servidor 2";
                     }
                     if (i == 3) {
                         Server servidor3 = new Server(portList[i - 1], InetAddress.getByName(ipList[i - 1]));
-                        servidor3.execute();
                         serverList.add(servidor3);
+                        serverList.get(2).run();
                         writer.println(servidor3.getAddress());
                         writer.println(servidor3.getPort());
                         return "Novo cliente conectado ao servidor 3";

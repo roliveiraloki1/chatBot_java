@@ -35,7 +35,7 @@ public class Client {
     public void execute() {
         try {
             Socket socket = new Socket(address, port); //cria um socket com os parametros para conectar no server
- 
+            System.out.println(socket.getLocalAddress() + " " + socket.getLocalPort());
             System.out.println("Conectado ao server.");
  
             new ReadThread(socket).start(); //executa o metodo run() da classe ReadThread
