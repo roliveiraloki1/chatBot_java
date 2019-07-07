@@ -40,6 +40,7 @@ public class Manager {
 
             while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
                 Socket socketClient = socket.accept();
+                System.out.println(socketClient.getInetAddress() + "; " + socketClient.getLocalSocketAddress());
                 redirectClient(socketClient);
             }
 
