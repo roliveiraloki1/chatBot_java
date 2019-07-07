@@ -20,7 +20,7 @@ public class ChatBotServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+                
         try {
             Manager manager = new Manager();
             manager.run();

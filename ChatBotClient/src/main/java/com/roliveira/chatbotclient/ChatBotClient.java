@@ -5,19 +5,60 @@
  */
 package com.roliveira.chatbotclient;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author roliv
  */
 public class ChatBotClient {
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String hostname = null; //seta o hostname como null
-        int port = 1234; //seta a porta a se conectar em 1234
- 
-        Client client = new Client(hostname, port); //cria um novo cliente
-        client.execute(); //executa o metodo para conectar o cliente criado
+
+        try {
+
+            String ip = null;
+            int port = 0;
+            boolean serverNotFree = true;
+
+            while (serverNotFree) {
+
+                InetAddress adrs = InetAddress.getByName("127.0.0.1"); //seta o ip do servidor Gerenciador
+                Socket mainServer = new Socket(adrs, 1234); //Conecta ao servidor Gerenciador
+
+                InputStream input = mainServer.getInputStream();//Aguarda dados do MainServer (Gerenciador)
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+                ip = reader.readLine();//Recebe endereço ip e porta do servidor que será alocado
+                if (ip.equals("-1")) {
+                    System.out.println("Todos os servidores estão ocupados no momento.");
+                } else {
+                    port = Integer.parseInt(reader.readLine());
+                    serverNotFree = false;
+                }
+
+                mainServer.close();//Fecha socket do líder neste cliente
+
+            }
+
+            Client client = new Client(ip, port); //cria um novo cliente
+            client.execute(); //executa o metodo para conectar o cliente criado
+
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ChatBotClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ChatBotClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

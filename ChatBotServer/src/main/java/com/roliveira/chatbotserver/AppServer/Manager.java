@@ -6,6 +6,8 @@
 package com.roliveira.chatbotserver.AppServer;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -28,8 +30,8 @@ public class Manager {
     public Manager() throws UnknownHostException, IOException {
         this.socket = new ServerSocket(1234);
         this.serverList = new ArrayList<Server>();
-        this.addressVector = new InetAddress[]{Inet4Address.getByName("127.0.0.1"),
-            Inet4Address.getByName("127.0.0.1"), Inet4Address.getByName("127.0.0.1")};
+        this.addressVector = new InetAddress[]{Inet4Address.getByName("127.0.0.100"),
+            Inet4Address.getByName("127.0.0.102"), Inet4Address.getByName("127.0.0.103")};
     }
 
     public void run() {
@@ -40,7 +42,6 @@ public class Manager {
 
             while (true) {//aqui é feito o loop do server, enquanto ele estiver ligado ele fica recebendo novos usuários
                 Socket socketClient = socket.accept();
-                System.out.println(socketClient.getInetAddress() + "; " + socketClient.getLocalSocketAddress());
                 redirectClient(socketClient);
             }
 
@@ -65,7 +66,10 @@ public class Manager {
                 }
                 break;
             case 2:
-                if (serverList.get(1).getNumberUsersConnected() < 3) {
+                if (serverList.get(0).getNumberUsersConnected() < 3) {
+                    addUserToServer(serverList.get(0), socketClient);
+                }
+                else if (serverList.get(1).getNumberUsersConnected() < 3) {
                     addUserToServer(serverList.get(1), socketClient);
                 } else {
                     createNewServer();
@@ -74,6 +78,12 @@ public class Manager {
                 break;
             case 3:
                 int index = checkServers();
+                if (index == -1) {
+                    OutputStream sender = socketClient.getOutputStream();
+                    PrintWriter writer = new PrintWriter(sender, true);
+                    writer.println("-1");
+                    break;
+                }
                 addUserToServer(serverList.get(index), socketClient);
                 break;
             default:
@@ -96,25 +106,29 @@ public class Manager {
     public void createNewServer() throws IOException {
         int number = serverList.size();
         Server server = new Server(portVector[number], addressVector[number]);
+        server.start();
         serverList.add(server);
     }
 
     public int checkServers() {
         int min = 3;
-        int size;
         int index = -1;
         for (int i = 0; i < serverList.size(); i++) {
-            size = serverList.get(i).getNumberUsersConnected();
-            if (size < min) {
-                min = size;
+            if (serverList.get(i).getNumberUsersConnected() < min) {
+                min = serverList.get(i).getNumberUsersConnected();
                 index = i;
             }
         }
-        return index;    
+        return index;
     }
-    
-    public void addUserToServer(Server server, Socket socketClient) throws IOException{
-        server.addClient(socketClient);
+
+    public void addUserToServer(Server server, Socket socketClient) throws IOException {
+
+        OutputStream sender = socketClient.getOutputStream();
+        PrintWriter writer = new PrintWriter(sender, true);
+
+        writer.println(server.getServerSocket().getInetAddress().getHostAddress());
+        writer.println(String.valueOf(server.getServerSocket().getLocalPort()));
     }
 
 }

@@ -65,6 +65,7 @@ public class UserThread extends Thread {
  
         } catch (IOException ex) {
             System.out.println("Erro na thread do usuário: " + ex.getMessage()); //printa erro caso encontre erro na thread
+            server.removeUser(this); //ao sair do laço, remove o usuário
         }
     }
  
