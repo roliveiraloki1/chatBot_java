@@ -15,20 +15,20 @@ import java.util.logging.Logger;
  * @author roliv
  */
 public class ChatBotServer {
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-                
+
         try {
-            Manager manager = new Manager();
-            manager.run();
+            Manager manager = new Manager(); //cria um novo gerenciador
+            manager.run(); //executa o gerenciador
         } catch (UnknownHostException ex) {
             Logger.getLogger(ChatBotServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ChatBotServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

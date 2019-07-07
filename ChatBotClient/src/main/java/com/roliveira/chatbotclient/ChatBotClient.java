@@ -23,32 +23,33 @@ public class ChatBotClient {
 
     /**
      * @param args the command line arguments
+     * Classe main do cliente
      */
     public static void main(String[] args) {
 
-        try {
+        try { //neste try-catch o cliente entra em um loope esperando resposta de um servidor disponível
 
             String ip = null;
             int port = 0;
             boolean serverNotFree = true;
 
-            while (serverNotFree) {
+            while (serverNotFree) { //enquanto não houver um servidor com espaço para novos clientes o loop continua
 
                 InetAddress adrs = InetAddress.getByName("127.0.0.1"); //seta o ip do servidor Gerenciador
-                Socket mainServer = new Socket(adrs, 1234); //Conecta ao servidor Gerenciador
+                Socket manager = new Socket(adrs, 1234); //Conecta ao servidor Gerenciador
 
-                InputStream input = mainServer.getInputStream();//Aguarda dados do MainServer (Gerenciador)
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                InputStream input = manager.getInputStream();//Aguarda dados do manager (Gerenciador)
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input)); //lê os dados do manager
 
-                ip = reader.readLine();//Recebe endereço ip e porta do servidor que será alocado
-                if (ip.equals("-1")) {
-                    System.out.println("Todos os servidores estão ocupados no momento.");
+                ip = reader.readLine();//Recebe endereço ip do servidor que será alocado ou mensagem de servidores lotados (-1)
+                if (ip.equals("-1")) {//caso a mensagem atribuída ao ip seja -1, ainda não existe servidor com vaga
+                    System.out.println("Todos os servidores estão ocupados no momento.");//printa constantemente msg de servidores ocupados
                 } else {
-                    port = Integer.parseInt(reader.readLine());
+                    port = Integer.parseInt(reader.readLine());//Recebe a porta do servidor que será alocado
                     serverNotFree = false;
                 }
 
-                mainServer.close();//Fecha socket do líder neste cliente
+                manager.close();//Fecha socket do manager neste cliente
 
             }
 

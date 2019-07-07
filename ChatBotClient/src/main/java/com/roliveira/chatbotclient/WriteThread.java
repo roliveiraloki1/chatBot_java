@@ -17,12 +17,15 @@ import java.net.Socket;
  * @author roliv
  */
 public class WriteThread extends Thread {
+
     private PrintWriter writer;
     private Socket socket;
 
     /**
      * construtor da classe
-     * @param socket utiliza o socket criado do cliente para receber a resposta do server
+     *
+     * @param socket utiliza o socket criado do cliente para receber a resposta
+     * do server
      */
     public WriteThread(Socket socket) { //construtor do WriteThread
         this.socket = socket;
@@ -35,14 +38,14 @@ public class WriteThread extends Thread {
         }
     }
 
-       /**
-        * Método que inicia o receptor de mensagens do usuário
-        */
+    /**
+     * Método que inicia o receptor de mensagens do usuário
+     */
     @Override
     public void run() {
         try {
             BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-            
+
             String input;
 
             do {

@@ -15,19 +15,22 @@ import java.net.Socket;
  *
  * @author roliv
  */
-public class ReadThread extends Thread{
-    
+public class ReadThread extends Thread {
+
     private BufferedReader reader;
     private Socket socket;
+
     /**
-     * método construtor da  classe
-     * @param socket utiliza o socket criado do cliente para enviar a resposta do server
+     * método construtor da classe
+     *
+     * @param socket utiliza o socket criado do cliente para enviar a resposta
+     * do server
      */
     public ReadThread(Socket socket) { //construtor recebe o socket setado ao criar o cliente
         this.socket = socket;
 
         try {
-            InputStream input = socket.getInputStream(); 
+            InputStream input = socket.getInputStream();
             reader = new BufferedReader(new InputStreamReader(input)); //recebe e lê o input do cliente
         } catch (IOException ex) {
             System.out.println("Erro ao pegar input: " + ex.getMessage());
@@ -35,10 +38,10 @@ public class ReadThread extends Thread{
     }
 
     /**
-     *executa o método leitor do cliente
+     * executa o método leitor do cliente
      */
     @Override
-    public void run() { 
+    public void run() {
         while (true) {
             try {
                 System.out.print(">> ");

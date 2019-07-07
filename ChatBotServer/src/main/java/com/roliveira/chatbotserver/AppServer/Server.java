@@ -25,16 +25,27 @@ public class Server extends Thread{
     /**
      * método construtor da classe
      *
-     * @param port recebe o port do server
+     * @param port porta do servidor
+     * @param address endereço de ip do servidor
+     * @throws java.io.IOException necessário quando se utiliza a classe
+     * InetAddress
      */
     public Server(int port, InetAddress address) throws IOException {
         this.serverSocket = new ServerSocket(port, 5, address);
     }
 
+    /**
+     *
+     * @return retorna o socket do servidor
+     */
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
 
+    /**
+     *
+     * @return retorna o numero de clientes conectados ao servidor
+     */
     public int getNumberUsersConnected() {
         return userThreads.size();
     }
@@ -71,7 +82,7 @@ public class Server extends Thread{
      * a resposta
      *
      * @param message mensagem retornada do método executeCommand()
-     * @param user
+     * @param user Thread que o cliente está conectado
      */
     public void respond(String message, UserThread user) {
         user.sendMessage(message); //
@@ -80,6 +91,7 @@ public class Server extends Thread{
     /**
      * Quando um usuário é desconectado, remove a Thread daquele usuário do
      * sistema.
+     * @param aUser Thread do usuário que será removido 
      */
     public void removeUser(UserThread aUser) { //esse método remove o usuário do server, caso ele digite "Sair"
         userThreads.remove(aUser); //método para remover a thread do usuário específico
