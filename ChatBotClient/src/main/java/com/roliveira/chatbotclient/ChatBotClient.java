@@ -15,7 +15,7 @@ public class ChatBotClient {
      */
     public static void main(String[] args) {
         String hostname = null; //seta o hostname como null
-        int port = 12345; //seta a porta a se conectar em 1234
+        int port = 1234; //seta a porta a se conectar em 1234
  
         Client client = new Client(hostname, port); //cria um novo cliente
         client.execute(); //executa o metodo para conectar o cliente criado
